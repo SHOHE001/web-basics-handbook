@@ -15,16 +15,20 @@
 ```
 web-basics-handbook/
 ├── README.md              # このファイル
+├── CLAUDE.md              # Claude Code 用の運用ルール・進捗
 ├── requirements.txt       # Python 依存パッケージ（章を進めるごとに追記）
 ├── .gitignore
-└── chapters/
-    ├── 01-what-is-web/    # Web とは何か
-    ├── 02-network/        # ネットワーク（IP / DNS / TCP）
-    ├── 03-http/           # HTTP ★実装重め
-    ├── 04-data-format/    # JSON / CSV / MIME
-    ├── 05-web-app/        # Flask / FastAPI ★実装重め
-    ├── 06-security/       # SQLi / XSS の再現と対策
-    └── 07-infra/          # 構築・運用
+├── chapters/              # 本編
+│   ├── 01-what-is-web/    # Web とは何か
+│   ├── 02-network/        # ネットワーク（IP / DNS / TCP）
+│   ├── 03-http/           # HTTP ★実装重め
+│   ├── 04-data-format/    # JSON / CSV / MIME
+│   ├── 05-web-app/        # Flask / FastAPI ★実装重め
+│   ├── 06-security/       # SQLi / XSS の再現と対策
+│   └── 07-infra/          # 構築・運用
+└── extras/                # 番外編
+    ├── qa-log.md          # 「わからない」を Claude に聞いた記録
+    └── supplements/       # 記録が 3 件たまると Claude が作る補強ページ
 ```
 
 ## 進捗
@@ -60,7 +64,8 @@ pip install -r requirements.txt
 1. 章の `README.md` を最後まで読む（本文＋つまずきポイント）
 2. 「手を動かすパート」がある章では `code/` 配下のスクリプトを実行
 3. うまく動かなかったら、エラーメッセージごと Claude Code に貼って質問
-4. 次の章へ
+4. **わからない単語が出てきたら遠慮なく Claude Code に聞く**。回答と一緒に `extras/qa-log.md` に記録され、同じ関連章で 3 件たまると補強ページを Claude が提案してくれます
+5. 次の章へ
 
 ## 参考
 
