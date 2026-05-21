@@ -1,0 +1,10 @@
+# web-basics-handbook の依存パッケージ
+# 章を進めるごとに追記していく。
+
+# Chapter 2 / 3 で使用予定
+# requests
+
+# Chapter 5 で使用予定
+# flask
+# fastapi
+# uvicorn
