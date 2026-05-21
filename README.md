@@ -30,7 +30,7 @@ web-basics-handbook/
 ## 進捗
 
 - [x] Chapter 1: Web とは何か
-- [ ] Chapter 2: ネットワーク
+- [x] Chapter 2: ネットワーク
 - [ ] Chapter 3: HTTP
 - [ ] Chapter 4: データ形式
 - [ ] Chapter 5: Web アプリ

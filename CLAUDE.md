@@ -72,8 +72,8 @@
 ## 現在の進捗（2026-05-21 時点）
 
 - [x] **Chapter 1: Web とは何か** — 完了
-- [ ] Chapter 2: ネットワーク — 未着手
-- [ ] Chapter 3: HTTP — 未着手
+- [x] **Chapter 2: ネットワーク** — 完了
+- [ ] Chapter 3: HTTP — 次に着手
 - [ ] Chapter 4: データ形式 — 未着手
 - [ ] Chapter 5: Web アプリ — 未着手
 - [ ] Chapter 6: セキュリティ — 未着手
@@ -83,13 +83,12 @@
 
 ## これからの学習の流れ
 
-### Chapter 2: ネットワーク（次に着手）
+### Chapter 2: ネットワーク（完了）
 
-- IP アドレス、ポート番号、DNS、TCP/UDP、URL の構造
-- 実装: Python で `nslookup` / `ping` / `curl` 相当を書く、`urllib.parse` で URL を分解、ソケットで直接通信
-- ゴール: ブラウザでページが出るまでの「名前解決」「接続」を手で再現できる
+- 扱った: レイヤ構造（OSI / TCP-IP モデル）、IPv4/IPv6、グローバル/プライベート IP、MAC、サブネットマスク、NAT、ポート番号、DNS、TCP/UDP、3-way ハンドシェイク、URL の構造
+- 実装: `01_dns_lookup.py`（名前解決）、`02_url_parse.py`（URL 分解）、`03_tcp_connect.py`（TCP コネクションの確立）
 
-### Chapter 3: HTTP ★実装重め
+### Chapter 3: HTTP ★実装重め（次に着手）
 
 - メソッド・ステータスコード・ヘッダー・ボディ・Cookie・HTTPS
 - 実装: 生ソケットで HTTP リクエストを手書き → `requests` → ブラウザ JS の `fetch` の順で同じことをやって比較
