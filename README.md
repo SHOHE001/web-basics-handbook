@@ -35,8 +35,8 @@ web-basics-handbook/
 
 - [x] Chapter 1: Web とは何か
 - [x] Chapter 2: ネットワーク
-- [ ] Chapter 3: HTTP
-- [ ] Chapter 4: データ形式
+- [x] Chapter 3: HTTP
+- [x] Chapter 4: データ形式
 - [ ] Chapter 5: Web アプリ
 - [ ] Chapter 6: セキュリティ
 - [ ] Chapter 7: 構築・運用

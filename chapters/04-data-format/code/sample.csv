@@ -1,0 +1,5 @@
+name,age,is_student,city
+Alice,22,true,Tokyo
+Bob,30,false,Osaka
+"Carol, the great",25,true,Kyoto
+Dave,28,false,"Sapporo, Hokkaido"

@@ -70,13 +70,13 @@
 
 ---
 
-## 現在の進捗（2026-05-21 時点）
+## 現在の進捗（2026-05-22 時点）
 
 - [x] **Chapter 1: Web とは何か** — 完了
 - [x] **Chapter 2: ネットワーク** — 完了
-- [ ] Chapter 3: HTTP — 次に着手
-- [ ] Chapter 4: データ形式 — 未着手
-- [ ] Chapter 5: Web アプリ — 未着手
+- [x] **Chapter 3: HTTP** — 完了
+- [x] **Chapter 4: データ形式** — 完了
+- [ ] Chapter 5: Web アプリ — 次に着手
 - [ ] Chapter 6: セキュリティ — 未着手
 - [ ] Chapter 7: 構築・運用 — 未着手
 
