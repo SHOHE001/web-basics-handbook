@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <title>Ch3: ブラウザ JS から HTTP を叩く</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 720px; margin: 2em auto; padding: 0 1em; line-height: 1.6; }
+    pre { background: #f4f4f4; padding: 1em; overflow-x: auto; }
+    button { padding: 0.5em 1em; font-size: 1em; cursor: pointer; }
+    .row { margin: 1em 0; }
+  </style>
+</head>
+<body>
+  <h1>Ch3: ブラウザ JS から HTTP を叩く</h1>
+
+  <p>
+    このファイルをそのままダブルクリック（または「ブラウザで開く」）すると、
+    JavaScript の <code>fetch</code> を使って HTTP リクエストを送れます。
+    開発者ツール（F12）の <strong>Console</strong> と <strong>Network</strong> タブを開いてからボタンを押してください。
+  </p>
+
+  <div class="row">
+    <button id="btn-get">GET https://httpbin.org/get</button>
+  </div>
+
+  <div class="row">
+    <button id="btn-post">POST https://httpbin.org/post（JSON ボディ付き）</button>
+  </div>
+
+  <div class="row">
+    <button id="btn-404">GET https://httpbin.org/status/404</button>
+  </div>
+
+  <h2>結果</h2>
+  <pre id="result">（ボタンを押すとここに表示されます）</pre>
+
+  <script>
+    const out = document.getElementById('result');
+
+    function render(label, data) {
+      out.textContent = `[${label}]\n` + JSON.stringify(data, null, 2);
+    }
+
+    // 1) シンプルな GET
+    document.getElementById('btn-get').addEventListener('click', async () => {
+      const res = await fetch('https://httpbin.org/get');
+      const json = await res.json();
+      render(`GET ${res.status} ${res.statusText}`, json);
+      console.log('response object:', res);
+    });
+
+    // 2) JSON ボディ付き POST
+    document.getElementById('btn-post').addEventListener('click', async () => {
+      const res = await fetch('https://httpbin.org/post', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ hello: 'world', from: 'browser fetch' }),
+      });
+      const json = await res.json();
+      render(`POST ${res.status} ${res.statusText}`, json);
+    });
+
+    // 3) わざと 404
+    document.getElementById('btn-404').addEventListener('click', async () => {
+      const res = await fetch('https://httpbin.org/status/404');
+      render(`GET ${res.status} ${res.statusText}`, {
+        ok: res.ok,
+        note: 'fetch は 404 を例外にしない。res.ok で判定すること',
+      });
+    });
+  </script>
+</body>
+</html>
