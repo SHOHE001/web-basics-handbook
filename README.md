@@ -37,9 +37,9 @@ web-basics-handbook/
 - [x] Chapter 2: ネットワーク
 - [x] Chapter 3: HTTP
 - [x] Chapter 4: データ形式
-- [ ] Chapter 5: Web アプリ
-- [ ] Chapter 6: セキュリティ
-- [ ] Chapter 7: 構築・運用
+- [x] Chapter 5: Web アプリ
+- [x] Chapter 6: セキュリティ
+- [x] Chapter 7: 構築・運用
 
 各章のステータスは章内 `README.md` 冒頭にも記載（執筆予定 / 執筆中 / 完了）。
 
