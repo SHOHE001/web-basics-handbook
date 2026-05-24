@@ -39,3 +39,7 @@ dist/
 *.sqlite
 *.sqlite3
 *.db
+
+# Chapter 6 の XSS 実習で生成される HTML（学習用、リポジトリには入れない）
+chapters/06-security/code/vulnerable.html
+chapters/06-security/code/fixed.html

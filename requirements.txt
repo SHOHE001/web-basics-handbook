@@ -4,7 +4,6 @@
 # Chapter 3 で使用
 requests
 
-# Chapter 5 で使用予定
-# flask
-# fastapi
-# uvicorn
+# Chapter 5 で使用
+fastapi>=0.110
+uvicorn[standard]>=0.27
