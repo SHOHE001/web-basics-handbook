@@ -45,12 +45,12 @@ def main() -> None:
 
         code = response.status_code
         label = classify(code)
-        ok_mark = "[OK]" if response.ok else "[NG]"  # 2xx 系のときだけ True
+        ok_mark = "[OK]" if response.ok else "[NG]"  # status_code < 400 のとき True（3xx も含む）
         print(f"{ok_mark} {code:>3}  {label:<25}  {note}  ({url})")
 
     print()
     print("ヒント:")
-    print("  - response.ok は 2xx のときだけ True（3xx も False になる）")
+    print("  - response.ok は status_code < 400 のとき True（2xx と 3xx は True、4xx・5xx は False）")
     print("  - 4xx は「お前が悪い」、5xx は「サーバーが悪い」と覚える")
     print("  - 418 は HTTP のジョーク仕様（コーヒーポットに紅茶を頼んだら返す）")
 
