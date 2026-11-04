@@ -1,6 +1,6 @@
 """このハンドブックを「もの文読書室」に置ける静的 HTML に変換する。
 
-- chapters/（Web 編）・fe/（基本情報 編）・extras/ の Markdown を HTML にする
+- chapters/（Web 編）・fe/（基本情報）・ap/（応用情報）・sc/（支援士）・extras/ の Markdown を HTML にする
 - README.md は index.html に、ほかの .md は同じ場所の .html にする
 - Markdown 間のリンク（xxx.md）も .html に書き換える
 - GitHub の注意書き（> [!CAUTION] など）を色付きの枠にする
@@ -27,8 +27,9 @@ from pathlib import Path
 import markdown
 
 REPO = Path(__file__).resolve().parent.parent
-SOURCE_DIRS = ["chapters", "fe", "extras"]
-SITE_TITLE = "Web と基本情報のハンドブック"
+SOURCE_DIRS = ["chapters", "fe", "ap", "sc", "extras"]
+BOOK_DIRS = ["chapters", "fe", "ap", "sc"]
+SITE_TITLE = "Web と情報処理試験のハンドブック"
 
 ALERT_LABELS = {
     "NOTE": "補足",
@@ -222,7 +223,7 @@ def chapter_readmes(folder: str) -> list[Path]:
 
 def build_pager(src: Path, out_path: Path, out_root: Path) -> str:
     """同じ編の前後の章へのリンクを作る。"""
-    for folder in ("chapters", "fe"):
+    for folder in BOOK_DIRS:
         chapters = chapter_readmes(folder)
         if src in chapters:
             i = chapters.index(src)
@@ -273,13 +274,25 @@ def build_index(out_root: Path) -> None:
     body = (
         f"<h1>{SITE_TITLE}</h1>"
         "<p>非エンジニアの大学生が、手を動かしながら Web 技術の基礎を学び、"
-        "その知識を基本情報技術者試験の言葉で整理し直すための自分用ハンドブックです。</p>"
+        "その知識を基本情報・応用情報・情報処理安全確保支援士の試験の言葉で整理し直すための自分用ハンドブックです。</p>"
         + book("Web 技術の基本", "ブラウザの裏側で何が起きているかを、Python で再現しながら学ぶ本編です。", None, "chapters")
         + book(
             "基本情報技術者試験",
             "本編の知識を試験の分野ごとに整理し直し、科目 A・科目 B に備えるパートです。",
             REPO / "fe" / "README.md",
             "fe",
+        )
+        + book(
+            "応用情報技術者試験",
+            "基本情報から上乗せされる知識と、記述式の科目 B の解き方を分野ごとにまとめたパートです。",
+            REPO / "ap" / "README.md",
+            "ap",
+        )
+        + book(
+            "情報処理安全確保支援士試験",
+            "セキュリティの専門家として説明・判断できる深さまで掘り下げるパートです。登録制の資格の仕組みも扱います。",
+            REPO / "sc" / "README.md",
+            "sc",
         )
         + f'<section class="book"><h2>番外編</h2><ul>{"".join(extras)}</ul></section>'
     )
