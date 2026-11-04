@@ -165,7 +165,7 @@ Excel や Google スプレッドシートとそのままやり取りできるの
 | `text/csv` | CSV |
 | `application/json` | JSON |
 | `application/xml` | XML |
-| `application/javascript` | JavaScript |
+| `text/javascript` | JavaScript（2022 年の RFC 9239 でこれが正式。古い `application/javascript` も見かける） |
 | `application/pdf` | PDF |
 | `application/octet-stream` | 種類不明のバイナリ |
 | `image/png` | PNG 画像 |
@@ -189,7 +189,7 @@ Excel や Google スプレッドシートとそのままやり取りできるの
 
 `Content-Type: text/html; charset=utf-8` のように、後ろに **文字コード** を添えられます。<mark>これがないとブラウザが文字コードを推測することになり、文字化けの原因になります</mark>。
 
-**実例**: 開発者ツールの `Network` から通信を 1 つ選んで `Headers → Response Headers` を見ると、`Content-Type: application/json` とか `Content-Type: text/html; charset=utf-8` が必ず付いているのが分かります。
+**実例**: 開発者ツールの `Network` から通信を 1 つ選んで `Headers → Response Headers` を見ると、`Content-Type: application/json` とか `Content-Type: text/html; charset=utf-8` が必ず付いているのが分かります。なお JSON は仕様（RFC 8259）で「やり取りするときは UTF-8」と決まっているので、`application/json` には本来 `charset` を付ける必要がありません（付いていても害はない）。
 
 #### MIME はファイル拡張子の代わり
 
@@ -228,8 +228,8 @@ OS（とくに Windows）はファイル拡張子で種類を判断しますが�
 | 例 | 保存 | 読む側の解釈 | 結果 |
 |---|---|---|---|
 | 1 | UTF-8 | UTF-8 | 正しく表示 |
-| 2 | Shift_JIS | UTF-8 | 「縺ゅ＞縺・▲縺」みたいな化け方 |
-| 3 | UTF-8 | Shift_JIS | 「・蜈・蜉幢ｼ・」みたいな化け方 |
+| 2 | Shift_JIS | UTF-8 | 「����」のような読めない記号（置換文字）だらけになる |
+| 3 | UTF-8 | Shift_JIS | 「縺ゅ＞縺医♀」（元は「あいうえお」）みたいな漢字まじりの化け方 |
 
 ブラウザが推測するので最近はあまり化けませんが、**API が UTF-8 で返してきた JSON を、`charset=shift_jis` で誤って解釈する** とアプリ側で派手に化けます。
 
@@ -306,11 +306,11 @@ python 03_mime_types.py
 | **XML** | JSON の前世代の表現形式 | RSS フィード、Office ファイルの中身 |
 | **CSV / TSV** | 行 1 件・カンマ（タブ）区切りの素朴な形式 | Excel、Google フォーム、銀行明細 |
 | **MIME タイプ** | データ形式の標準名（`タイプ/サブタイプ`） | `application/json`, `image/png` |
-| **`Content-Type`** | ボディの形式を伝える HTTP ヘッダー | `application/json; charset=utf-8` |
+| **`Content-Type`** | ボディの形式を伝える HTTP ヘッダー | `application/json`, `text/html; charset=utf-8` |
 | **`charset`** | 文字コードの指定 | `charset=utf-8` |
 | **文字コード** | 文字 ↔ バイト列の対応ルール | UTF-8, Shift_JIS, EUC-JP |
 | **UTF-8** | Unicode を 1〜4 バイトで表す。世界標準 | HTML5 の標準、Web の事実上の標準 |
-| **文字化け** | 保存時と読込時の文字コードがズレた結果 | 「縺ゅ＞縺・▲縺」みたいな表示 |
+| **文字化け** | 保存時と読込時の文字コードがズレた結果 | UTF-8 を Shift_JIS として読むと「縺ゅ＞縺医♀」みたいな表示 |
 | **BOM** | UTF-8 を示すファイル先頭 3 バイトの目印 | Excel が CSV を化けさせない対策で付ける |
 | **`application/x-www-form-urlencoded`** | 普通のフォーム送信の MIME | ログインフォームの POST ボディ |
 | **`multipart/form-data`** | ファイルアップロード用 MIME | 画像投稿フォーム |

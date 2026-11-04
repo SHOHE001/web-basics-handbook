@@ -30,7 +30,7 @@
 
 Wikipedia は記事を読むだけ。Twitter は **「いいね」を押すと数字が増える**、つまりサーバーの中の状態（DB のレコード）が書き換わる。後者を支えているのが **Web アプリ** と呼ばれる仕組みです。
 
-**実例**: 同じブラウザで開いていても、`https://ja.wikipedia.org/wiki/HTML` は静的なページ（≒ Web サイト寄り）、`https://twitter.com/home` はログイン状態とタイムラインの計算がリクエストごとに走る（Web アプリ）。
+**実例**: 同じブラウザで開いていても、`https://ja.wikipedia.org/wiki/HTML` は静的なページ（≒ Web サイト寄り）、`https://x.com/home`（旧 Twitter）はログイン状態とタイムラインの計算がリクエストごとに走る（Web アプリ）。
 
 ### 2. Web フレームワークの役割
 
@@ -108,7 +108,7 @@ def delete_item(item_id: int): ...
 - `?q=python` のような <mark>**クエリパラメータ**</mark> は、関数の引数（パスパラに無いもの）として自動で渡される
 - POST のボディ（JSON）は、Pydantic というライブラリの **モデルクラス**（`Item`）に自動で詰めてくれる
 
-**実例**: Twitter の URL を見ると `https://twitter.com/<ユーザー名>/status/<ツイートID>` という構造。これも内部的には `/{username}/status/{tweet_id}` のようなルーティングが書かれていて、`username` と `tweet_id` が関数に渡って、対応するツイートを返している、と想像できる。
+**実例**: X（旧 Twitter）の URL を見ると `https://x.com/<ユーザー名>/status/<ポストID>` という構造（2024 年にドメインが `twitter.com` から `x.com` に移った）。これも内部的には `/{username}/status/{tweet_id}` のようなルーティングが書かれていて、`username` と `tweet_id` が関数に渡って、対応するツイートを返している、と想像できる。
 
 ### 5. REST API の考え方
 
@@ -248,7 +248,7 @@ python -m http.server 5500
 > このセクションは「最初に Web アプリを書いたとき**ほぼ確実に踏む**罠」のリスト。動かないときはまずここを疑う。
 
 - <mark>**`uvicorn app:app` の意味**</mark>: 「`app.py` というファイルの中の `app` という変数」を読み込む、という指定。ファイル名と変数名を間違えると `Error loading ASGI app` で落ちる
-- <mark>**ポートかぶり**</mark>: 同じ PC で `uvicorn` を 2 重起動すると `[Errno 48] Address already in use`。古いほうを `Ctrl + C` で止めるか、`--port 8001` で別ポートに逃がす
+- <mark>**ポートかぶり**</mark>: 同じ PC で `uvicorn` を 2 重起動すると「Address already in use」系のエラー（Windows なら `[WinError 10048]`、macOS なら `[Errno 48]`、Linux なら `[Errno 98]`）。古いほうを `Ctrl + C` で止めるか、`--port 8001` で別ポートに逃がす
 - <mark>**`fetch` の戻り値はヘッダーだけ**</mark>: ボディは `res.json()` か `res.text()` で再度 `await` しないと取れない
 - <mark>**CORS はサーバー側で直す**</mark>: クライアントをいくらいじっても直らない（最重要）
 - <mark>**`localhost` と `127.0.0.1` は別オリジン扱い**</mark>: ブラウザは「文字列が違えば別オリジン」と判断するので、`allow_origins=["http://localhost:5500"]` と書いてブラウザで `http://127.0.0.1:5500` を開くと CORS で落ちる。地味にハマる
@@ -275,5 +275,5 @@ API を立てて、フロントから叩いて、CORS の壁を 1 回越えた�
 | **オリジン** | `スキーム + ホスト + ポート` の組 | `http://127.0.0.1:8000` |
 | **同一オリジンポリシー** | 別オリジンへのアクセスを基本禁止するブラウザの安全装置 | 銀行サイトに勝手にリクエストされない仕組み |
 | **CORS** | サーバーが「このオリジンは許可」と宣言する仕組み | `Access-Control-Allow-Origin` ヘッダー |
-| **プリフライト** | 本リクエストの前にブラウザが送る `OPTIONS` 問い合わせ | カスタムヘッダーや PUT/DELETE で発動 |
+| **プリフライト** | 本リクエストの前にブラウザが送る `OPTIONS` 問い合わせ | カスタムヘッダー、PUT/DELETE、`Content-Type: application/json` の POST で発動 |
 | **Swagger UI / OpenAPI** | API の対話式ドキュメント | `/docs` で自動表示される画面 |
