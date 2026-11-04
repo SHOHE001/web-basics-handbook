@@ -27,6 +27,14 @@ if [ -e "$TARGET" ] && [ ! -f "$TARGET/.web-basics-handbook" ]; then
   exit 1
 fi
 
+# 何かを変える前に、読書室フォルダ全体をバックアップする（古いバックアップは自動では消さない）
+BACKUP_DIR="${READING_ROOM_BACKUP_DIR:-$HOME/monobun-reading-room-backups}"
+mkdir -p "$BACKUP_DIR"
+BACKUP="$BACKUP_DIR/monobun-reading-room-$(date +%Y%m%d-%H%M%S).tar.gz"
+tar -czf "$BACKUP" -C "$(dirname "$ROOM_DIR")" "$(basename "$ROOM_DIR")"
+echo "バックアップしました: $BACKUP"
+echo "  元に戻すとき: rm -rf \"$ROOM_DIR\" && tar -xzf \"$BACKUP\" -C \"$(dirname "$ROOM_DIR")\""
+
 # ビルド用の仮想環境（初回だけ作る）
 if [ ! -x "$VENV/bin/python" ]; then
   python3 -m venv "$VENV"

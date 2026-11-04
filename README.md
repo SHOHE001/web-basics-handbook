@@ -69,7 +69,7 @@ web-basics-handbook/
 読み物としての公開先は GitHub ではなく **もの文読書室**（自宅サーバー gen8 の `~/monobun-reading-room` を配信している静的サイト）です。Markdown を HTML に変換して、読書室の中の `web-basics-handbook/` サブフォルダに置きます。
 
 ```bash
-# gen8 の上で
+# gen8 の上で（初回は先に git clone https://github.com/SHOHE001/web-basics-handbook.git ~/web-basics-handbook）
 cd ~/web-basics-handbook
 git pull
 bash tools/deploy_reading_room.sh
@@ -77,6 +77,7 @@ bash tools/deploy_reading_room.sh
 
 - 初回だけ、ビルド用の仮想環境 `.venv-build/` を作って `markdown` パッケージを入れます
 - 読書室のほかのファイルには触らず、`web-basics-handbook/` だけを作り直します
+- 何かを変える前に、読書室フォルダ全体を `~/monobun-reading-room-backups/monobun-reading-room-日時.tar.gz` にバックアップします（古いバックアップは自動では消しません）。戻し方は実行時に表示されます
 - 読書室のトップ URL の後ろに `/web-basics-handbook/` を付けると目次が開きます
 
 ## セットアップ
