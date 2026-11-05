@@ -8,7 +8,12 @@
    （[!CAUTION] など）・表の行数と列数・箇条書きの数が元と同じかを確かめる。
    1 つでも違えば、理由を添えてやり直させ（最大 2 回）、それでもだめなら元のまま残す。
 
-使い方:
+使い方（ほかのツールで書き直したファイルを検査する。API キー不要）:
+    python tools/rewrite_with_gemini.py --check                 # 未コミットの変更を HEAD と比べる
+    python tools/rewrite_with_gemini.py --check --base main     # コミット済みの変更を main と比べる
+    python tools/rewrite_with_gemini.py --check --revert        # 不合格のファイルを元に戻す
+
+使い方（このスクリプトから Gemini API を呼ぶ）:
     export GEMINI_API_KEY=...            # キーは環境変数で渡す（ファイルに書かない）
     python tools/rewrite_with_gemini.py --list-models
     python tools/rewrite_with_gemini.py --model <モデル名> --dry-run   # 検査だけ、書き込まない
@@ -24,6 +29,7 @@ import argparse
 import json
 import os
 import re
+import subprocess
 import sys
 import time
 import urllib.error
@@ -149,6 +155,58 @@ def rewrite(protected: str, model: str, key: str, feedback: str = "") -> str:
     return out + ("\n" if protected.endswith("\n") else "")
 
 
+# ---------------------------------------------------------------- 検査だけのモード
+
+def check_against(original: str, rewritten: str) -> list[str]:
+    """ほかのツールで書き直した文章が、元の内容を保っているかを確かめる。"""
+    prot_orig, saved_orig = protect(original)
+    prot_new, saved_new = protect(rewritten)
+    problems = []
+    if saved_orig != saved_new:
+        # 見出し・コード・インラインコード・リンク先・Status 行は、順番も含めて 1 文字も変えてはいけない
+        for i, (a, b) in enumerate(zip(saved_orig, saved_new)):
+            if a != b:
+                problems.append(f"保護すべき部分が変わった（{i + 1} 個目）: 元 {a[:60]!r} → 後 {b[:60]!r}")
+                break
+        if len(saved_orig) != len(saved_new):
+            problems.append(f"保護すべき部分の数が変わった（元 {len(saved_orig)}、後 {len(saved_new)}）")
+        return problems
+    return differences(fingerprint(prot_orig), fingerprint(prot_new))
+
+
+def git_show(base: str, rel: Path) -> str | None:
+    result = subprocess.run(["git", "show", f"{base}:{rel.as_posix()}"], cwd=REPO, capture_output=True)
+    return result.stdout.decode("utf-8") if result.returncode == 0 else None
+
+
+def run_check(files: list[Path], base: str, revert: bool) -> None:
+    passed, failed, unchanged = [], [], 0
+    for path in files:
+        rel = path.relative_to(REPO)
+        original = git_show(base, rel)
+        if original is None:
+            continue  # 比較元にないファイル（新しく作ったもの）は対象外
+        rewritten = path.read_text(encoding="utf-8")
+        if rewritten == original:
+            unchanged += 1
+            continue
+        problems = check_against(original, rewritten)
+        if problems:
+            failed.append(rel)
+            print(f"[不合格] {rel}")
+            for p in problems:
+                print(f"    - {p}")
+            if revert:
+                path.write_text(original, encoding="utf-8")
+                print("    → 元に戻しました")
+        else:
+            passed.append(rel)
+            print(f"[合格] {rel}")
+    print(f"\n合格 {len(passed)} 件、不合格 {len(failed)} 件、変更なし {unchanged} 件（比較元: {base}）")
+    if failed and not revert:
+        sys.exit(1)
+
+
 # ---------------------------------------------------------------- メイン
 
 def target_files(args: list[str]) -> list[Path]:
@@ -167,7 +225,14 @@ def main() -> None:
     parser.add_argument("--list-models", action="store_true", help="使えるモデルの一覧を表示して終わる")
     parser.add_argument("--dry-run", action="store_true", help="書き直しと検査だけ行い、ファイルは書き換えない")
     parser.add_argument("--retries", type=int, default=2)
+    parser.add_argument("--check", action="store_true", help="API を呼ばず、書き直し済みのファイルを比較元と比べて検査する")
+    parser.add_argument("--base", default="HEAD", help="--check の比較元（git のブランチ名やコミット）")
+    parser.add_argument("--revert", action="store_true", help="--check で不合格のファイルを比較元の内容に戻す")
     args = parser.parse_args()
+
+    if args.check:
+        run_check(target_files(args.files), args.base, args.revert)
+        return
 
     key = os.environ.get("GEMINI_API_KEY")
     if not key:
