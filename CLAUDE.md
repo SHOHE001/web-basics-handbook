@@ -15,7 +15,7 @@
 - 応用情報 編（`ap/`）・支援士 編（`sc/`）は特定の書籍によらず、IPA の試験の構成（科目 A の上乗せ ＋ 科目 B の分野）に沿って章立てする。FE と同じ内容はくり返さず、下位の編の章へリンクする
 - 基本情報 編（`fe/`）の章の順番と大分類は『かやのき先生の基本情報技術者教室』（技術評論社）にならう。節の組み立てと本文は独自に書き起こし、書籍の節見出しや文章は写さない
 - リポジトリ: <https://github.com/SHOHE001/web-basics-handbook>（public）。ソースの管理場所
-- **読み物としての公開先は GitHub ではなく、もの文読書室**（gen8 の `~/monobun-reading-room` を `python -m http.server 8910` で配信している静的サイト）。`tools/deploy_reading_room.sh` を gen8 上で実行し、読書室の `web-basics-handbook/` サブフォルダに HTML を置く。読書室のほかのファイルには触らない
+- **読み物としての公開先は GitHub ではなく、もの文読書室**（gen8 の `~/monobun-reading-room` を `python -m http.server 8910` で配信している静的サイト）。`tools/deploy_reading_room.sh` を gen8 上で実行し、読書室の `web-basics-handbook/` サブフォルダに HTML を置く。読書室のファイルで書き換えるのは、配置のたびに更新する `sw.js` のキャッシュ名の行だけで、ほかには触らない（配置の前に読書室全体を `~/monobun-reading-room-backups/` にバックアップする）
 
 ---
 
