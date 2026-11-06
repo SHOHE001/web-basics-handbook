@@ -56,7 +56,9 @@ def describe(mime: str) -> str:
         return "PDF"
     if mime == "application/zip":
         return "ZIP アーカイブ"
-    if mime == "application/javascript":
+    if mime in ("text/javascript", "application/javascript"):
+        # RFC 9239 (2022) で text/javascript が正式になった。
+        # Python 3.12 以降の mimetypes は text/javascript を返す。
         return "JavaScript"
     return ""
 

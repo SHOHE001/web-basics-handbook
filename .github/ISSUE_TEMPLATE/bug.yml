@@ -1,0 +1,21 @@
+name: 不具合
+description: 表示や内容の誤りを記録する
+labels: [bug]
+body:
+  - type: textarea
+    id: observed
+    attributes:
+      label: 起きていること
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期待する状態
+    validations:
+      required: true
+  - type: textarea
+    id: where
+    attributes:
+      label: 場所と再現手順
+      description: ページのパス、端末、画面幅など

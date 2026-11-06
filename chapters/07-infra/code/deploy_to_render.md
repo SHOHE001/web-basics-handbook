@@ -2,7 +2,7 @@
 
 Chapter 7 の手を動かすパート。Chapter 5 の `chapters/05-web-app/code/app.py`（FastAPI の TODO API）を、**Render** という PaaS にデプロイして、世界から見える URL で叩けるようにする。
 
-> Render を例に挙げているのは「GitHub 連携で push したら自動デプロイ」「HTTPS 自動」「無料枠あり」「クレジットカード登録なしで開始できる」の 4 点が揃っているため。Fly.io / Railway / Vercel などでも考え方は同じ。
+> Render を例に挙げているのは「GitHub 連携で push したら自動デプロイ」「HTTPS 自動」「無料枠あり」「クレジットカード登録なしで開始できる」の 4 点が揃っているため（2026 年 11 月時点の情報。無料枠の条件は変わることがあるので、始める前に Render の料金ページを確認する）。Railway / Vercel などでも考え方は同じ。Fly.io は 2024 年 10 月に新規ユーザー向けの無料枠をやめているので、無料で試す用途には向かない。
 
 ---
 
@@ -75,7 +75,7 @@ curl https://my-todo-api.onrender.com/items
 - **`CORS` で叩けない**:
   Chapter 5 の `app.py` の `allow_origins` に本番のフロント URL を追加する必要がある
 - **無料プランは寝る**:
-  Render の Free プランは一定時間アクセスが無いとサービスが「スリープ」する。初回アクセスに数十秒かかったらこれ。コールドスタートはトレードオフ
+  Render の Free プランは 15 分間アクセスが無いとサービスが「スリープ」する。次のアクセスで起き上がるまで 1 分前後かかることがある。初回アクセスが妙に遅かったらこれ。コールドスタートはトレードオフ
 - **本番では `USE_CORS = False` のデプロイをしない**:
   Chapter 5 で CORS の体験用に置いたスイッチ。本番では必ず `True` のまま
 
@@ -83,7 +83,7 @@ curl https://my-todo-api.onrender.com/items
 
 - **環境変数** を Render の画面から設定して、コードから `os.environ["..."]` で読む（DB の URL や API キーをコードに直書きしない練習）
 - **GitHub の `main` に push** すると Render が自動で再デプロイする = これが <mark>**CI/CD**</mark> の最小形
-- **Render の DB（PostgreSQL）** を作って、インメモリ `dict` を本物の DB に置き換える（次の学習ステップ）
+- **Render の DB（PostgreSQL）** を作って、インメモリ `dict` を本物の DB に置き換える（次の学習ステップ）。ただし無料の Postgres は **作成から 30 日で期限切れ**になり、猶予期間を過ぎるとデータごと消える。練習用と割り切ること
 
 ---
 

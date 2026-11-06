@@ -1,0 +1,16 @@
+name: 追加・改善
+description: 章の追加や読書室の改善を記録する
+labels: [enhancement]
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: 目的
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: 受入条件
+    validations:
+      required: true

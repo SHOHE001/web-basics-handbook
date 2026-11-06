@@ -3,6 +3,10 @@
 httpbin.org は HTTP の挙動を試すための公開テストサーバー。
 URL のパスを `/status/404` のようにすると、その番号で返してくれる。
 
+注意: httpbin.org は無料の公開サービスなので、混雑して 502/503 を返したり
+つながらなかったりすることがある。そのときは同じ使い方ができる互換サービス
+https://httpbingo.org に URL のホスト部分を差し替えて試す。
+
 ステータスコードに応じて挙動を分岐する書き方の練習。
 
 使い方:
@@ -45,12 +49,12 @@ def main() -> None:
 
         code = response.status_code
         label = classify(code)
-        ok_mark = "[OK]" if response.ok else "[NG]"  # 2xx 系のときだけ True
+        ok_mark = "[OK]" if response.ok else "[NG]"  # status_code < 400 のとき True（3xx も含む）
         print(f"{ok_mark} {code:>3}  {label:<25}  {note}  ({url})")
 
     print()
     print("ヒント:")
-    print("  - response.ok は 2xx のときだけ True（3xx も False になる）")
+    print("  - response.ok は status_code < 400 のとき True（2xx と 3xx は True、4xx・5xx は False）")
     print("  - 4xx は「お前が悪い」、5xx は「サーバーが悪い」と覚える")
     print("  - 418 は HTTP のジョーク仕様（コーヒーポットに紅茶を頼んだら返す）")
 

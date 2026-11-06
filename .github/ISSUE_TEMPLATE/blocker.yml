@@ -1,0 +1,21 @@
+name: 詰まり
+description: 同じ問題で3回の試行が失敗したときに記録する
+labels: [blocked]
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: 目的と受入条件
+    validations:
+      required: true
+  - type: textarea
+    id: attempts
+    attributes:
+      label: 試行（仮説 / 変更または検証 / 結果）
+      description: 実際に行った試行だけを書く。秘密情報は伏せる
+    validations:
+      required: true
+  - type: textarea
+    id: next
+    attributes:
+      label: 次の一手と必要な外部対応
