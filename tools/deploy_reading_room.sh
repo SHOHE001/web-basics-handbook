@@ -4,8 +4,9 @@
 # gen8 の上で実行する想定:
 #   cd ~/web-basics-handbook && git pull && bash tools/deploy_reading_room.sh
 #
-# 読書室フォルダの中の web-basics-handbook/ サブフォルダだけを作り直す。
-# 読書室のほかのファイル（index.html や service worker など）には触らない。
+# 読書室フォルダの中の web-basics-handbook/ サブフォルダを作り直し、
+# sw.js のキャッシュ名を更新する（端末に古いページが残らないようにするため）。
+# 読書室のほかのファイル（index.html など）には触らない。
 set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "$0")/.." && pwd)"
@@ -49,6 +50,18 @@ if [ -e "$TARGET" ]; then
 fi
 mv "$NEW" "$TARGET"
 rm -rf "$OLD"
+
+# service worker はキャッシュを優先して返すので、名前を変えて古いキャッシュを捨てさせる
+SW="$ROOM_DIR/sw.js"
+CACHE_NAME="monobun-reading-room-$(date +%Y%m%d-%H%M%S)"
+if [ ! -f "$SW" ]; then
+  echo "注意: $SW がないのでキャッシュ名は更新しませんでした" >&2
+elif grep -qE "^const CACHE = '[^']*';" "$SW"; then
+  sed -i -E "s/^const CACHE = '[^']*';/const CACHE = '$CACHE_NAME';/" "$SW"
+  echo "キャッシュ名を更新しました: $CACHE_NAME"
+else
+  echo "注意: $SW にキャッシュ名の行が見つからないので更新しませんでした。端末に古いページが残る可能性があります" >&2
+fi
 
 echo "配置しました: $TARGET/index.html"
 echo "読書室のトップ URL の後ろに /$SUBDIR/ を付けて開いてください"
